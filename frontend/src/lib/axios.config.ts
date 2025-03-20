@@ -1,9 +1,9 @@
 import Axios, { AxiosError, AxiosInstance } from "axios";
 import { useAuthStore } from "@/store/auth";
-import { useErrorStore } from "@/store/errors";
+import { API_BASE_URL } from "@/constants";
 
 const axios: AxiosInstance = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost",
+  baseURL: API_BASE_URL,
   headers: { "X-Requested-With": "XMLHttpRequest", Accept: "application/json" },
   withCredentials: true,
   withXSRFToken: true,

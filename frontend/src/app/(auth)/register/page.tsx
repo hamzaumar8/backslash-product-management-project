@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,11 +16,9 @@ import { API_BASE_URL } from "@/constants";
 import { toast } from "sonner";
 import axios from "@/lib/axios.config";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function Page() {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,7 +34,8 @@ export function LoginForm({
       // Ensure CSRF token is set
       await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`);
 
-      const response = await axios.post(`${API_BASE_URL}/api/login`, {
+      const response = await axios.post(`${API_BASE_URL}/api/register`, {
+        name,
         email,
         password,
       });
@@ -57,7 +56,7 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={"flex flex-col gap-6"}>
       <Card>
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -68,6 +67,19 @@ export function LoginForm({
         <CardContent>
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-3">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name}</p>
+                )}
+              </div>
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -84,12 +96,6 @@ export function LoginForm({
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  {/* <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a> */}
                 </div>
                 <Input
                   id="password"
@@ -105,9 +111,9 @@ export function LoginForm({
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
+              Already have an account?{" "}
+              <a href="/login" className="underline underline-offset-4">
+                Login
               </a>
             </div>
           </form>
