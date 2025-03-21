@@ -25,6 +25,8 @@ class ProductResource extends Resource
 
     protected static ?string $navigationGroup = 'Store Management';
 
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -46,6 +48,16 @@ class ProductResource extends Resource
     public static function query()
     {
         return parent::query()->where('tenant_id', tenant('id'));
+    }
+
+    // public static function query(Builder $query): Builder
+    // {
+    //     return $query->where('tenant_id', Tenancy::tenant()->id);
+    // }
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['tenant_id'] = tenant('id');
+        return $data;
     }
 
     public static function table(Table $table): Table

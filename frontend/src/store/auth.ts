@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "../../types";
+import type { User } from "../types/user";
 
 interface AuthState {
   user: User | null;
@@ -10,8 +10,11 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
+  user:
+    typeof window !== "undefined" && localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")!)
+      : null,
+  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
 
   setToken: (token) => {
     if (typeof window !== "undefined") {
@@ -21,12 +24,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   setUser: (user) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user", JSON.stringify(user));
+    }
     set(() => ({ user }));
   },
 
   removeUser: () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
     set(() => ({ token: null, user: null }));
   },

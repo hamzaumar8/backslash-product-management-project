@@ -21,14 +21,6 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Tenant::create([
-            'name' => 'Store A',
-            'domain' => 'store-a.local',
-        ]);
 
-        Tenant::create([
-            'name' => 'Store B',
-            'domain' => 'store-b.local',
-        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -11,7 +12,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Product::where('tenant_id', tenant('id'))->get());
     }
 
     /**
@@ -27,7 +28,11 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::where('id', $id)
+            ->where('tenant_id', tenant('id'))
+            ->firstOrFail();
+
+        return response()->json($product);
     }
 
     /**
