@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 export default function Products() {
   const { token, setToken } = useAuthStore();
-  const { data: products, isLoading } = useProducts();
+  const { data: products, isLoading, error } = useProducts();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -17,6 +17,9 @@ export default function Products() {
     router.push("/login");
     return null;
   }
+
+  if (isLoading) return <p>Loading products...</p>;
+  if (error) return <p>Error loading products.</p>;
 
   return (
     <div className="p-6">

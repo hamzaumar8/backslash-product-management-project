@@ -31,9 +31,6 @@ export default function Page() {
     setErrors({});
 
     try {
-      // Ensure CSRF token is set
-      await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`);
-
       const response = await axios.post(`${API_BASE_URL}/api/register`, {
         name,
         email,
@@ -59,9 +56,9 @@ export default function Page() {
     <div className={"flex flex-col gap-6"}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Register an account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details below to register account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -106,7 +103,7 @@ export default function Page() {
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full" disabled={loading}>
-                  Login
+                  Sign up
                 </Button>
               </div>
             </div>

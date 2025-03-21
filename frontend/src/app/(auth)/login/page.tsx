@@ -21,7 +21,7 @@ export default function Page() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const { setToken } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -30,16 +30,17 @@ export default function Page() {
     setErrors({});
 
     try {
-      // Ensure CSRF token is set
-      await axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`);
-
       const response = await axios.post(`${API_BASE_URL}/api/login`, {
         email,
         password,
       });
+      console.log("response", response);
+      const { token, user } = response.data;
       // Store token
-      setToken(response.data.token);
-      router.push("/");
+      setToken(token);
+      setUser(user);
+
+      router.push("/dashboard");
     } catch (error) {
       console.log(error);
       if (error.response.status === 422) {

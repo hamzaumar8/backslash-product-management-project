@@ -1,18 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useAuthStore } from "../store/auth";
+import axios from "@/lib/axios.config";
 
-const fetchProducts = async (token: string | null) => {
-  if (!token) return [];
-  const response = await axios.get("http://localhost:8000/api/products", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return response.data;
+const fetchProducts = async () => {
+  // const response = await axios.get("/api/products");
+  // return response.data;
+  return [];
 };
 
 export const useProducts = () => {
-  const { token } = useAuthStore();
-  return useQuery(["products"], () => fetchProducts(token), {
-    enabled: !!token,
+  return useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+    // staleTime: 1000 * 60 * 5,
   });
 };

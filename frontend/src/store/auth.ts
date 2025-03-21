@@ -1,19 +1,33 @@
 import { create } from "zustand";
+import { User } from "../../types";
 
 interface AuthState {
+  user: User | null;
   token: string | null;
+  setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
   removeUser: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
+  user: null,
+  token: null,
+
   setToken: (token) => {
-    localStorage.setItem("token", token || "");
-    set({ token });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("token", token || "");
+    }
+    set(() => ({ token }));
   },
+
+  setUser: (user) => {
+    set(() => ({ user }));
+  },
+
   removeUser: () => {
-    localStorage.removeItem("token");
-    set({ token: null });
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+    }
+    set(() => ({ token: null, user: null }));
   },
 }));
