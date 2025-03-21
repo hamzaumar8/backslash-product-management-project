@@ -22,7 +22,11 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware([
+    'auth:sanctum',
+    InitializeTenancyByDomain::class,
+    PreventAccessFromCentralDomains::class
+])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

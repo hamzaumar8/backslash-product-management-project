@@ -15,6 +15,7 @@ import { useAuthStore } from "@/store/auth";
 import { API_BASE_URL } from "@/constants";
 import { toast } from "sonner";
 import axios from "@/lib/axios.config";
+import { AxiosError } from "axios";
 
 export default function Page() {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -36,6 +37,7 @@ export default function Page() {
       });
       console.log("response", response);
       const { token, user } = response.data;
+
       // Store token
       setToken(token);
       setUser(user);
@@ -43,8 +45,13 @@ export default function Page() {
       router.push("/dashboard");
     } catch (error) {
       console.log(error);
-      if (error.response.status === 422) {
-        setErrors(error.response.data.errors || {});
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 422) {
+          setErrors(error.response.data.errors || {});
+        } else {
+          console.error("Login error:", error);
+          toast.error("An unexpected error occurred.");
+        }
       } else {
         console.error("Login error:", error);
         toast.error("An unexpected error occurred.");

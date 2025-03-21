@@ -22,11 +22,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/auth";
+import { User } from "../../types";
 
-export function NavUser() {
+export function NavUser({ user }: { user: User | null }) {
   const { isMobile } = useSidebar();
 
-  const { user, removeUser } = useAuthStore();
+  const { removeUser } = useAuthStore();
 
   return (
     <SidebarMenu>

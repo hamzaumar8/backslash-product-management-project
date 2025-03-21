@@ -12,7 +12,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return response()->json(Product::where('tenant_id', tenant('id'))->get());
+        $products = Product::all();
+        return response()->json($products);
     }
 
     /**

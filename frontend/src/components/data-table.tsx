@@ -62,7 +62,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DrawerFooter } from "./ui/drawer";
 
 export const schema = z.object({
   id: z.number(),
@@ -131,7 +130,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: "Header",
     cell: ({ row }) => {
       // return <TableCellViewer item={row.original} />;
-      return "";
+      return row.original;
     },
     enableHiding: false,
   },

@@ -18,8 +18,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
-use App\Filament\Pages\Login;
 use App\Models\Tenant;
+use Filament\Pages\Auth\Login;
 
 class TenantPanelProvider extends PanelProvider
 {
@@ -36,7 +36,7 @@ class TenantPanelProvider extends PanelProvider
                 'resources/js/app.js',
                 'resources/css/filament/admin/theme.css',
             ])
-            // ->login(Login::class)
+            ->login(Login::class)
             ->tenant(Tenant::class)
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\\Filament\\Tenant\\Resources')
             ->discoverPages(in: app_path('Filament/Tenant/Pages'), for: 'App\\Filament\\Tenant\\Pages')
