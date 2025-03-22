@@ -197,7 +197,6 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof productSchema>> }) {
 }
 
 export function DataTable({ data }: { data: z.infer<typeof productSchema>[] }) {
-  console.log("data", data);
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});

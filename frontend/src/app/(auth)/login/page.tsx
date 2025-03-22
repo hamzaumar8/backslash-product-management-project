@@ -35,7 +35,6 @@ export default function Page() {
         email,
         password,
       });
-      console.log("response", response);
       const { token, user } = response.data;
 
       // Store token
@@ -44,7 +43,6 @@ export default function Page() {
 
       router.push("/dashboard");
     } catch (error) {
-      console.log(error);
       if (error instanceof AxiosError) {
         if (error.response?.status === 422) {
           setErrors(error.response.data.errors || {});

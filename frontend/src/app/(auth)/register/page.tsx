@@ -39,9 +39,8 @@ export default function Page() {
       });
       // Store token
       setToken(response.data.token);
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
-      console.log(error);
       if (error instanceof AxiosError) {
         if (error.response?.status === 422) {
           setErrors(error.response.data.errors || {});

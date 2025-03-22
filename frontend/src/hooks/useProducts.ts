@@ -3,7 +3,6 @@ import axios from "@/lib/axios.config";
 
 const fetchProducts = async () => {
   const response = await axios.get("/api/products");
-  console.log("response", response.data);
   return response.data;
 };
 
