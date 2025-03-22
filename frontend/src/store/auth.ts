@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import Cookies from "js-cookie";
 import { User } from "../../types";
 
 interface AuthState {
@@ -11,30 +12,44 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user:
-    typeof window !== "undefined" && localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user")!)
+    typeof window !== "undefined" && Cookies.get("user")
+      ? JSON.parse(Cookies.get("user")!)
       : null,
-  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
+  token:
+    typeof window !== "undefined" && Cookies.get("token")
+      ? Cookies.get("token")
+      : null,
 
+  // Set the token and update cookies
   setToken: (token) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("token", token || "");
+      if (token) {
+        Cookies.set("token", token, { expires: 7 }); // Expires in 7 days
+      } else {
+        Cookies.remove("token");
+      }
     }
-    set(() => ({ token }));
+    set({ token });
   },
 
+  // Set the user and update cookies
   setUser: (user) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("user", JSON.stringify(user));
+      if (user) {
+        Cookies.set("user", JSON.stringify(user), { expires: 7 }); // Expires in 7 days
+      } else {
+        Cookies.remove("user");
+      }
     }
-    set(() => ({ user }));
+    set({ user });
   },
 
+  // Remove user and token from state and cookies
   removeUser: () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      Cookies.remove("token");
+      Cookies.remove("user");
     }
-    set(() => ({ token: null, user: null }));
+    set({ token: null, user: null });
   },
 }));

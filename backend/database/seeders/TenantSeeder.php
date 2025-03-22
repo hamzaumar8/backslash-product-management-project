@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Tenant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Stancl\Tenancy\Facades\Tenancy;
 
 class TenantSeeder extends Seeder
 {
@@ -13,14 +14,20 @@ class TenantSeeder extends Seeder
      */
     public function run(): void
     {
-        $tenantA = Tenant::create([
-            'name' => 'Store A',
-        ]);
-        $tenantA->domains()->create(['domain' => 'store-a.local']);
+        $tenants = [
+            ['name' => 'Store A', 'domain' => 'store-a.local'],
+            ['name' => 'Store B', 'domain' => 'store-b.local'],
+        ];
 
-        $tenantB = Tenant::create([
-            'name' => 'Store B',
-        ]);
-        $tenantB->domains()->create(['domain' => 'store-b.local']);
+        foreach ($tenants as $tenantData) {
+            $tenant = Tenant::create(['name' => $tenantData['name']]);
+            $tenant->domains()->create(['domain' => $tenantData['domain']]);
+
+            // Run seeder in tenant database
+            Tenancy::initialize($tenant);
+            // Seed products for this tenant
+            $this->call(ProductSeeder::class);
+            Tenancy::end();
+        }
     }
 }
