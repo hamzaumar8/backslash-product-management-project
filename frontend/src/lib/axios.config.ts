@@ -1,6 +1,7 @@
 import Axios, { AxiosError, AxiosInstance } from "axios";
 import { useAuthStore } from "@/store/auth";
 import { API_BASE_URL } from "@/constants";
+import Cookies from "js-cookie";
 
 const axios: AxiosInstance = Axios.create({
   baseURL: API_BASE_URL,
@@ -11,7 +12,7 @@ const axios: AxiosInstance = Axios.create({
 
 // Request Interceptor: Attach Authorization Token
 axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
